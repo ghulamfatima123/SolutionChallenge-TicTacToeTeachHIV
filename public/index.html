@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>educating about health and HIV through game
+</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		table {
+			margin: auto;
+			border-collapse: collapse;
+			border: 2px solid black;
+		}
+		td {
+			width: 50px;
+			height: 50px;
+			border: 1px solid black;
+			font-size: 30px;
+			font-weight: bold;
+			text-align: center;
+			cursor: pointer;
+		}
+		td:hover {
+			background-color: #f1f1f1;
+		}
+	</style>
+</head>
+<body>
+	<style>
+  /* Style the banner container */
+  .banner {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ccc;
+    padding: 20px;
+  }
+  
+  /* Style the banner text */
+  .banner h1 {
+    margin: 0;
+    font-size: 36px;
+    color: #333;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  
+  /* Add a background image to the banner */
+  .banner-image {
+    background-image: url('https://source.unsplash.com/random/1600x600');
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+  }
+  
+  /* Add some overlay to the banner image */
+  .banner-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  /* Style the banner overlay text */
+  .banner-overlay h2 {
+    margin: 0;
+    font-size: 48px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Add some hover effects to the banner overlay text */
+  .banner-overlay h2:hover {
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+</style>
+
+<div class="banner">
+  <h1>Educating about Health and HIV through Tic Tac Toe</h1>
+  <div class="banner-image">
+    <div class="banner-overlay">
+      <h2>Play Tic Tac Toe and Learn about HIV</h2>
+    </div>
+  </div>
+</div>
+
+	<table>
+		<tr>
+			<td id="cell00" onclick="play(0,0)"></td>
+			<td id="cell01" onclick="play(0,1)"></td>
+			<td id="cell02" onclick="play(0,2)"></td>
+		</tr>
+		<tr>
+			<td id="cell10" onclick="play(1,0)"></td>
+			<td id="cell11" onclick="play(1,1)"></td>
+			<td id="cell12" onclick="play(1,2)"></td>
+		</tr>
+		<tr>
+			<td id="cell20" onclick="play(2,0)"></td>
+			<td id="cell21" onclick="play(2,1)"></td>
+			<td id="cell22" onclick="play(2,2)"></td>
+		</tr>
+	</table>
+	<p id="message"></p>
+	<button onclick="restart()">Restart</button>
+	
+	<section>
+	<br>
+	<p id="random-message">info:</p>
+</section>
+	<script>
+		var board = [
+			['', '', ''],
+			['', '', ''],
+			['', '', '']
+		];
+		var turn = 'X';
+		var message = document.getElementById('message');
+		var cells = [
+			[document.getElementById('cell00'), document.getElementById('cell01'), document.getElementById('cell02')],
+			[document.getElementById('cell10'), document.getElementById('cell11'), document.getElementById('cell12')],
+			[document.getElementById('cell20'), document.getElementById('cell21'), document.getElementById('cell22')]
+		];
+
+		function play(row, col) {
+			if (board[row][col] === '') {
+				board[row][col] = turn;
+				cells[row][col].textContent = turn;
+				if (checkWin()) {
+					message.textContent = turn + ' wins!';
+					disableCells();
+				} else if (checkTie()) {
+					message.textContent = 'Tie game!';
+				} else {
+					turn = turn === 'X' ? 'O' : 'X';
+					message.textContent = turn + "'s turn";
+				}
+			}
+		}
+
+		function checkWin() {
+			// check rows
+			for (var row = 0; row < 3; row++) {
+				if (board[row][0] !== '' && board[row][0] === board[row][1] && board[row][1] === board[row][2]) {
+					return true;
+				}
+			}
+			// check columns
+			for (var col = 0; col < 3; col++) {
+				if (board[0][col] !== '' && board[0][col] === board[1][col] && board[1][col] === board[2][col]) {
+					return true;
+				}
+			}
+			// check diagonals
+			if (board[0][0] !== '' && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+				return true;
+			}
+			if (board[0][2] !== '' && board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
+				return true;
+			}
+			return false;
+		}
+
+		function checkTie() {
+			for (var row = 0; row < 3; row++) {
+				for (var col = 0; col < 3; col++) {
+					if (board[row][col] === '') {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		function disableCells() {
+			for (var row = 0; row < 3; row++) {
+				for (var col = 0; col < 3; col++) {
+					cells[row][col].removeAttribute('onclick');
+				}
+			}
+		}
+
+		function restart() {
+		location.reload();
+			board = [				['', '', ''],
+				['', '', ''],
+				['', '', '']
+			];
+			turn = 'X';
+			message.textContent = turn + "'s turn";
+			for (var row = 0; row < 3; row++) {
+				for (var col = 0; col < 3; col++) {
+					cells[row][col].textContent = '';
+					cells[row][col].setAttribute('onclick', 'play(' + row + ',' + col + ')');
+				}
+			}
+		}
+
+		message.textContent = turn + "'s turn";
+	</script>
+	<script>
+  var messages = null;
+  fetch('messages.json')
+    .then(response => response.json())
+    .then(data => {
+      messages = data.messages;
+      var messaged = document.querySelector('#random-message');
+      messaged.textContent = messages[Math.floor(Math.random() * messages.length)];
+    })
+    .catch(error => console.error(error));
+</script>
+<style>
+  /* Style the container for the programmer names */
+  .programmers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    font-size: 18px;
+  }
+  
+  /* Style the individual programmer names */
+  .programmers a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  
+  /* Add some hover effects to the programmer names */
+  .programmers a:hover {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+  }
+</style>
+
+<div class="programmers">
+
+  <a href="https://www.linkedin.com/in/ghulam-fatima-041315251/">Ghulam Fatima</a>
+  <a href="https://www.linkedin.com/in/abiha-waqar-b1b500243/">Abiha Waqar</a>
+  <a href="https://www.linkedin.com/in/adeena-shahnawaz/">Adeena Shahnawaz</a>
+</div>
+
+</body>
+</html>
+
